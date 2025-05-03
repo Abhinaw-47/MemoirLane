@@ -7,15 +7,12 @@ import Posts from './components/Posts/Posts';
 import { useEffect } from 'react';
 import {getPosts} from './actions/posts'
 function App() {
+  const [currentId,setCurrentId]=useState(0)
 const dispatch=useDispatch()
 
 useEffect(()=>{
   dispatch(getPosts())
 },[dispatch])
-
-
-
-
 
 
   return (

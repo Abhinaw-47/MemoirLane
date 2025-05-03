@@ -3,9 +3,10 @@ import {Card, CardActions, CardContent, CardMedia, Button, Typography} from '@mu
 import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt'
 import DeleteIcon from '@mui/icons-material/Delete'
 import MoreHorizIcon from '@mui/icons-material/MoreHoriz'
+import moment from 'moment'
 const Post = ({ post, setCurrentId}) => {
   return (
-  ) => (
+  
     <Card
       sx={{
         display: 'flex',
@@ -84,10 +85,10 @@ const Post = ({ post, setCurrentId}) => {
           justifyContent: 'space-between',
         }}
       >
-        <Button size="small" color="primary" onClick={() => dispatch(likePost(post._id))}>
+        <Button size="small" color="primary" onClick={() => {}}>
           <ThumbUpAltIcon fontSize="small" /> &nbsp; Like {post.likeCount}
         </Button>
-        <Button size="small" color="primary" onClick={() => dispatch(deletePost(post._id))}>
+        <Button size="small" color="primary" onClick={() =>{}}>
           <DeleteIcon fontSize="small" /> &nbsp; Delete
         </Button>
       </CardActions>
