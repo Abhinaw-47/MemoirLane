@@ -4,15 +4,15 @@ import memories from './images/memories.png';
 import { useDispatch } from 'react-redux';
 import Form from './components/Form/Form';
 import Posts from './components/Posts/Posts';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import {getPosts} from './actions/posts'
 function App() {
-  const [currentId,setCurrentId]=useState(0)
+  const [currentId,setCurrentId]=useState(null)
 const dispatch=useDispatch()
 
 useEffect(()=>{
   dispatch(getPosts())
-},[dispatch])
+},[currentId,dispatch])
 
 
   return (
@@ -53,10 +53,10 @@ useEffect(()=>{
             spacing={3}
           >
             <Grid item xs={12} sm={7}>
-              <Posts />
+              <Posts setCurrentId={setCurrentId}/>
             </Grid>
             <Grid item xs={12} sm={4}>
-              <Form />
+              <Form  currentId={currentId} setCurrentId={setCurrentId}/>
             </Grid>
           </Grid>
         </Container>
