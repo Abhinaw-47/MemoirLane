@@ -6,6 +6,7 @@ import Form from './components/Form/Form';
 import Posts from './components/Posts/Posts';
 import { useEffect, useState } from 'react';
 import {getPosts} from './actions/posts'
+import Navbar from './components/Navbar/Navbar';
 function App() {
   const [currentId,setCurrentId]=useState(null)
 const dispatch=useDispatch()
@@ -17,33 +18,8 @@ useEffect(()=>{
 
   return (
     <Container maxWidth="lg">
-      <AppBar
-        position="static"
-        color="inherit"
-        sx={{
-          borderRadius: 3,
-          margin: '30px 0',
-          display: 'flex',
-          flexDirection: 'row',
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: '10px 20px',
-        }}
-      >
-        <Typography
-          variant="h2"
-          sx={{ color: 'rgba(0,183,255, 1)' }}
-        >
-          Memories
-        </Typography>
-        <img
-          src={memories}
-          alt="icon"
-          height="60"
-          style={{ marginLeft: '15px' }}
-        />
-      </AppBar>
-
+     
+     <Navbar/>
       <Grow in>
         <Container>
           <Grid
