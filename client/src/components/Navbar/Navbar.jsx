@@ -1,8 +1,26 @@
-import React from 'react'
-import { AppBar,Typography } from '@mui/material'
+import React, { useEffect, useState } from 'react'
+import { AppBar,Typography,Toolbar,Button, Avatar } from '@mui/material'
 import memories from '../../images/memories.png'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 const Navbar = () => {
+  const dispatch=useDispatch()
+  const navigate=useNavigate()
+  const location=useLocation()
+    const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile'))) 
+    
+     useEffect(()=>{
+ const token=user?.token
+ setUser(JSON.parse(localStorage.getItem('profile')))
+     },[location])
+
+
+    const logout=()=>{
+   
+     dispatch({type:'LOGOUT'})
+     navigate('/')
+     setUser(null)
+    }
   return (
     <AppBar
     position="static"
@@ -41,12 +59,14 @@ const Navbar = () => {
       style={{ marginLeft: '15px' }}
     />
     </div>
-    <Toolbar className={classes.toolbar}>
+    <Toolbar sx={{display: 'flex',
+    justifyContent: 'flex-end',
+    width: '400px',}}>
         {user?.result ? (
           <div sx={{ display: 'flex',
             justifyContent: 'space-between',
             width: '400px',}}>
-            <Avatar sx={{color: theme.palette.getContrastText(deepPurple[500]), backgroundColor: deepPurple[500],
+            <Avatar sx={{color:"white", backgroundColor:"purple",
 }} alt={user?.result.name} src={user?.result.imageUrl}>{user?.result.name.charAt(0)}</Avatar>
             <Typography sx={{display: 'flex',
     alignItems: 'center',}} variant="h6">{user?.result.name}</Typography>
