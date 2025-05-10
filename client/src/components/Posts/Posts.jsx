@@ -7,11 +7,12 @@ const Posts = ({setCurrentId}) => {
 
   const posts=useSelector((state)=>state.posts) 
   console.log(posts)
+  if (!Array.isArray(posts) || posts.length === 0) {
+    return <CircularProgress />;
+  }
   return (
  
-    !posts.length ? (
-      <CircularProgress />
-    ) : (
+ (
       <Grid
         container
         spacing={3}
