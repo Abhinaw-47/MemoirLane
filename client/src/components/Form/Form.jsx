@@ -6,12 +6,16 @@ import { useSelector } from 'react-redux'
 
 const Form = ({ currentId, setCurrentId}) => {
   const [postData, setPostData] = useState({
-    creator: '',
     title: '',
     message: '',
     tags: '',
     selectedFile: '',
   })
+   const [user, setUser] = useState(JSON.parse(localStorage.getItem('profile')))
+   useEffect(() => {
+    const storedUser = JSON.parse(localStorage.getItem('profile'))
+    setUser(storedUser)
+  }, [localStorage.getItem('profile')]) 
   const post=useSelector((state)=>currentId?state.posts.find((p)=>p._id===currentId):null)
   const dispatch = useDispatch()
   useEffect(()=>{
@@ -21,9 +25,9 @@ const Form = ({ currentId, setCurrentId}) => {
     e.preventDefault()
     if(currentId){
       console.log(currentId)
-      dispatch(updatePost(currentId,postData))
+      dispatch(updatePost(currentId,{...postData,name:user?.result?.name}))
     }else{
-      dispatch(createPost(postData))
+      dispatch(createPost({...postData,name:user?.result?.name}))  
     }
     clear()
   
@@ -31,12 +35,28 @@ const Form = ({ currentId, setCurrentId}) => {
   const clear = () => {
     setCurrentId(null)
     setPostData({
-      creator: '',
       title: '',
       message: '',
       tags: '',
       selectedFile: '',
     })
+  }
+  
+
+  
+  if(!user?.result?.name){
+    return (
+      <Paper
+      elevation={3}
+      sx={{
+        padding: 2,
+      }}
+    >
+      <Typography variant="h6" align="center">
+        Please Sign In to create your own memories and like other's memories.
+      </Typography>
+    </Paper>
+    )
   }
 
   return (
@@ -56,15 +76,6 @@ const Form = ({ currentId, setCurrentId}) => {
         {currentId ? `Editing "${post.title}"` : 'Creating a Memory'}
       </Typography>
 
-      <TextField
-        name="creator"
-        variant="outlined"
-        label="Creator"
-        fullWidth
-        value={postData.creator}
-        onChange={(e) => setPostData({ ...postData, creator: e.target.value })}
-        sx={{ m: 1 }}
-      />
       <TextField
         name="title"
         variant="outlined"

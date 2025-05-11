@@ -10,6 +10,7 @@ import { likePost } from '../../../actions/posts'
 
 const Post = ({ post, setCurrentId}) => {
   const dispatch=useDispatch()
+  const user=JSON.parse(localStorage.getItem('profile'))
   return (
   
     <Card
@@ -44,7 +45,7 @@ const Post = ({ post, setCurrentId}) => {
           color: 'white',
         }}
       >
-        <Typography variant="h6">{post.creator}</Typography>
+        <Typography variant="h6">{post.name}</Typography>
         <Typography variant="body2">{moment(post.createdAt).fromNow()}</Typography>
       </div>
       <div
@@ -55,9 +56,12 @@ const Post = ({ post, setCurrentId}) => {
           color: 'white',
         }}
       >
-        <Button size="small" onClick={() => setCurrentId(post._id)} sx={{ color: 'white' }}>
+        {user?.result?.googleId===post.creator|| user?.result?._id===post.creator && (
+           <Button size="small" onClick={() => setCurrentId(post._id)} sx={{ color: 'white' }}>
           <MoreHorizIcon fontSize="default" />
         </Button>
+        )}
+       
       </div>
       <div
         style={{
@@ -90,12 +94,16 @@ const Post = ({ post, setCurrentId}) => {
           justifyContent: 'space-between',
         }}
       >
-        <Button size="small" color="primary" onClick={() => {dispatch(likePost(post._id))}}>
-          <ThumbUpAltIcon fontSize="small" /> &nbsp; Like {post.likeCount}
+        <Button size="small" color="primary" 
+        disabled={!user?.result} onClick={() => {dispatch(likePost(post._id))}}>
+          <ThumbUpAltIcon fontSize="small" /> &nbsp;{ `${post.likes.length}`>1? `LIKES ${post.likes.length}`: `LIKE ${post.likes.length}`}
         </Button>
-        <Button size="small" color="primary" onClick={() =>{dispatch(deletePost(post._id))}}>
+        {user?.result?.googleId===post?.creator || user?.result?._id===post.creator && (
+             <Button size="small" color="primary" disabled={user?.result.name!==post.name} onClick={() =>{dispatch(deletePost(post._id))}}>
           <DeleteIcon fontSize="small" /> &nbsp; Delete
         </Button>
+        )}
+     
       </CardActions>
     </Card>
   )

@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { AppBar,Typography,Toolbar,Button, Avatar } from '@mui/material'
 import memories from '../../images/memories.png'
 import { useDispatch } from 'react-redux'
+import { jwtDecode } from 'jwt-decode';
 import { Link, useLocation, useNavigate } from 'react-router-dom'
 const Navbar = () => {
   const dispatch=useDispatch()
@@ -11,6 +12,10 @@ const Navbar = () => {
     
      useEffect(()=>{
  const token=user?.token
+ if(token){
+   const decodedToken=jwtDecode(token)
+   if(decodedToken.exp*1000<new Date().getTime()) logout()
+ }
  setUser(JSON.parse(localStorage.getItem('profile')))
      },[location])
 
