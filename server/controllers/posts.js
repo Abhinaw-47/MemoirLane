@@ -2,13 +2,36 @@ import mongoose from "mongoose";
 import express from "express";
 import PostMessage from "../models/postMessage.js"
 export const getPosts = async(req, res) => {
+    const {page}=req.query
     try {
-        const postMessage= await PostMessage.find()
-        res.status(200).json(postMessage)
+        const LIMIT=5
+        const startIndex=(Number(page)-1)*LIMIT
+        const total=await PostMessage.countDocuments({})
+        const posts= await PostMessage.find().sort({_id:-1}).limit(LIMIT).skip(startIndex)
+       
+        res.status(200).json({data:posts,currentPage:Number(page),numberOfPages:Math.ceil(total/LIMIT)})
     } catch (error) {
         res.status(404).json({message:error.message})
     }
 }
+export const getPostsBySearch=async(req,res)=>{
+    const {searchQuery}=req.query
+    try {
+        const keyword=new RegExp(searchQuery,'i')
+        const posts=await PostMessage.find({
+      $or: [
+        { title: { $regex: keyword } },
+        { message: { $regex: keyword } },
+        { tags: { $regex: keyword } },
+      ],
+    });
+        res.json({data:posts})
+    } catch (error) {
+        res.status(404).json({message:error.message})
+    }
+} 
+
+
 export const createPost = async (req, res) => {
     const post= req.body;
     const newPost = new PostMessage({...post,creator:req.userId,createdAt:new Date().toISOString()})
